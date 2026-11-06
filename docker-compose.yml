@@ -1,0 +1,12 @@
+services:
+  api:
+    build: .
+    restart: unless-stopped
+    ports: ["8000:8000"]
+    env_file: .env
+    environment:
+      DATA_DIR: /app/data
+    volumes:
+      - api-data:/app/data     # keeps completed.json / upcoming.json across restarts
+volumes:
+  api-data:

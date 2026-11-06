@@ -1,0 +1,33 @@
+services:
+  - type: web
+    name: anivoid-api
+    runtime: python
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn app.main:app --host 0.0.0.0 --port $PORT --workers 1 --proxy-headers
+    healthCheckPath: /heartbeat
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.12.7
+      - key: REFRESH_TZ
+        value: UTC               # e.g. Asia/Kolkata
+      - key: MONGODB_URI
+        sync: false              # paste your Atlas connection string in the Render dashboard
+      - key: SESSION_SECRET
+        generateValue: true
+      - key: PROXY_SECRET
+        sync: false              # same value as PROXY_SECRET on Vercel
+      - key: ADMIN_USERNAME
+        sync: false
+      - key: ADMIN_PASSWORD_HASH
+        sync: false
+      - key: ADMIN_TOTP_SECRET
+        sync: false
+      - key: REQUIRE_PROXY
+        value: "true"
+      - key: DISABLE_DOCS
+        value: "true"
+      - key: GOOGLE_CLIENT_ID
+        sync: false              # optional
+      # DATA_DIR defaults to ./data (the JSON files you commit/upload with the repo).
+      # On a paid plan you can add a persistent disk and set DATA_DIR to its mount path.
